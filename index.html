@@ -82,6 +82,10 @@
         text-align: center;
       }
 
+      .loading{
+        height: 40px;
+        margin:-15px;
+      }
 
     </style>
   </head>
@@ -188,14 +192,7 @@
       }
 
       function ChatMessages({ chatMessages }) {
-        const chatMessagesRef = React.useRef(null);
-
-        React.useEffect(()=>{
-          const containerElem = chatMessagesRef.current;
-          if (containerElem){
-            containerElem.scrollTop = containerElem.scrollHeight;
-          }
-        },[chatMessages])
+        const chatMessagesRef = useAutoScroll([chatMessages]);
         return (
           <div className="chat-messages-container"
           ref={chatMessagesRef}>
@@ -215,6 +212,18 @@
         return(
           <p className='welcome-text'> Welcome to the Chatbot project! Send a message using textbox below.</p>
         )
+      }
+
+      function useAutoScroll(dependencies){
+        const containerRef = React.useRef(null);
+
+        React.useEffect(()=>{
+          const containerElem = containerRef.current;
+          if (containerElem){
+            containerElem.scrollTop = containerElem.scrollHeight;
+          }
+        },dependencies);
+        return containerRef;
       }
 
       function App() {
