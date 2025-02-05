@@ -76,6 +76,11 @@
         -ms-overflow-style: none;
 
       }
+      
+      .welcome-message {
+        color: rgb(120, 120, 120);
+        text-align: center;
+      }
 
 
     </style>
@@ -200,31 +205,23 @@
           </div>
         );
       }
+      function welcome(chatMessages){
+        return(
+          <p className='welcome-text'> Welcome to the Chatbot project! Send a message using textbox below.</p>
+        )
+      }
 
       function App() {
-        const [chatMessages, setChatMessages] = React.useState([{
-          message: 'hello chatbot',
-          sender: 'user',
-          id: 'id1'
-        }, {
-          message: 'Hello! How can I help you?',
-          sender: 'robot',
-          id: 'id2'
-        }, {
-          message: 'can you get me todays date?',
-          sender: 'user',
-          id: 'id3'
-        }, {
-          message: 'Today is September 27',
-          sender: 'robot',
-          id: 'id4'
-        }]);
+        const [chatMessages, setChatMessages] = React.useState([]);
         // const [chatMessages, setChatMessages] = array;
         // const chatMessages = array[0];
         // const setChatMessages = array[1];
 
         return (
           <div className="app-contianer">
+            {chatMessages.length===0 && (<p className="welcome-message">
+                Welcome to the chatbot project! Send a message using the textbox below.
+              </p>)}
             <ChatMessages
               chatMessages={chatMessages}
             />
