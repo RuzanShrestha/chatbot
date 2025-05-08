@@ -4,14 +4,17 @@
 <head>
   <title>Chatbot</title>
   <style>
+    /* General body styles */
     body {
-      font-family: Arial;
-      margin-top: 0px;
-      margin-bottom: 0px;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: #121212; /* Dark background for comfort */
+      color: #E0E0E0; /* Light text color for good contrast */
     }
 
+    /* Send button styles */
     .send-button {
-      background-color: rgb(25, 135, 84);
+      background-color: #4CAF50; /* Subtle green for interactive buttons */
       color: white;
       padding: 12px 20px;
       margin-left: 10px;
@@ -19,74 +22,125 @@
       border-radius: 10px;
       font-size: 15px;
       cursor: pointer;
+      transition: background-color 0.3s ease;
     }
 
+    /* Hover effect for the send button */
+    .send-button:hover {
+      background-color: #45a049;
+    }
+
+    /* Chat input area */
     .chat-input {
       padding: 12px 15px;
       border-radius: 10px;
-      border-width: 1px;
+      border: 1px solid #333; /* Subtle border */
       font-size: 15px;
-
+      background-color: #1e1e1e; /* Dark background for input field */
+      color: #fff; /* Light text for readability */
       flex-grow: 1;
     }
 
+    /* Input container styles */
     .chat-input-container {
       display: flex;
       margin-bottom: 60px;
     }
 
+    /* App container */
     .app-contianer {
-      max-width: 600px;
+      max-width: 800px;
       margin-left: auto;
       margin-right: auto;
-
       height: 100vh;
       display: flex;
       flex-direction: column;
+      padding: 20px;
+      background-color: #181818; /* Slightly lighter background to distinguish */
+      border-radius: 12px; /* Rounded corners for elegance */
+      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
     }
 
+    /* Message styling for user */
     .chat-message-user {
       display: flex;
-      justify-content: end;
-      align-items: start;
+      justify-content: flex-end;
+      align-items: center;
     }
 
+    /* Message styling for robot */
     .chat-message-robot {
       display: flex;
-      align-items: start;
+      justify-content: flex-start; /* Left align the robot message */
+      align-items: center;
     }
 
-    .chat-message-text {
-      background-color: rgb(238, 238, 238);
+    /* Message text styling for the user (bubble) */
+    .chat-message-text-user {
+      background-color: #333; /* Darker background for messages */
       padding: 15px 20px;
       border-radius: 10px;
       margin-right: 10px;
       margin-left: 10px;
       margin-bottom: 20px;
       max-width: 300px;
+      word-wrap: break-word;
+      line-height: 1.5; /* Better line spacing for readability */
     }
 
-    .chat-message-profile {
-      width: 45px;
+    /* Message text styling for the robot (no bubble) */
+    .chat-message-text-robot {
+      background-color: transparent; /* No background for robot messages */
+      padding: 10px 20px;
+      margin-right: 10px;
+      margin-left: 10px;
+      margin-bottom: 20px;
+      max-width: 740px;
+      line-height: 1.5;
+      color: #E0E0E0; /* Light text color */
     }
 
+    /* Chat messages container */
     .chat-messages-container {
       flex-grow: 1;
       margin-top: 20px;
-      overflow: scroll;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
-
+      overflow-y: scroll;
+      scrollbar-width: none; /* Hide the scrollbar */
+      -ms-overflow-style: none; /* IE/Edge */
     }
 
+    .chat-messages-container::-webkit-scrollbar {
+      display: none; /* Hide scrollbar on webkit browsers */
+    }
+
+    /* Welcome message styling */
     .welcome-message {
-      color: rgb(120, 120, 120);
+      color: #B0B0B0; /* Soft gray for welcome message */
       text-align: center;
+      font-size: 16px;
+      margin-top: 50px;
     }
 
+    /* Loading spinner styles */
     .loading {
       height: 40px;
       margin: -15px;
+      background-image: url('loading.gif');
+      background-repeat: no-repeat;
+      background-position: center;
+      height: 40px;
+    }
+
+    /* Active input focus */
+    .chat-input:focus {
+      outline: none;
+      border-color: #4CAF50; /* Highlight the input field when focused */
+      box-shadow: 0px 0px 5px rgba(76, 175, 80, 0.8); /* Soft green glow for focus */
+    }
+
+    /* Button hover effect */
+    .send-button:hover {
+      background-color: #45a049; /* Slightly darker green on hover */
     }
   </style>
 </head>
@@ -120,14 +174,11 @@
           }
         ];
 
-        setChatMessages([
-          ...newChatMessages,
-          {
-            message: 'Loading...',
-            sender: 'robot',
-            id: crypto.randomUUID()
-          }
-        ]);
+        setChatMessages([ ...newChatMessages, {
+          message: 'Loading...',
+          sender: 'robot',
+          id: crypto.randomUUID()
+        }]);
 
         try {
           const response = await fetch('https://chatbotbackend-tanc.onrender.com/chat', {
@@ -139,24 +190,18 @@
           });
 
           const data = await response.json();
-          setChatMessages([
-            ...newChatMessages,
-            {
-              message: data.botReply,
-              sender: 'robot',
-              id: crypto.randomUUID()
-            }
-          ]);
+          setChatMessages([ ...newChatMessages, {
+            message: data.botReply,
+            sender: 'robot',
+            id: crypto.randomUUID()
+          }]);
         } catch (error) {
           console.error('Error communicating with server:', error);
-          setChatMessages([
-            ...newChatMessages,
-            {
-              message: 'Error: could not connect to chatbot.',
-              sender: 'robot',
-              id: crypto.randomUUID()
-            }
-          ]);
+          setChatMessages([ ...newChatMessages, {
+            message: 'Error: could not connect to chatbot.',
+            sender: 'robot',
+            id: crypto.randomUUID()
+          }]);
         }
 
         setInputText('');
@@ -169,8 +214,10 @@
             size="30"
             onChange={saveInputText}
             value={inputText}
-            onKeyDown=
-            {() => { if (event.key === "Enter") { sendMessage() } else if (event.key === "Escape") { setInputText("") } }}
+            onKeyDown={(event) => {
+              if (event.key === "Enter") { sendMessage() }
+              else if (event.key === "Escape") { setInputText("") }
+            }}
             className="chat-input"
           />
           <button
@@ -182,36 +229,13 @@
     }
 
     function ChatMessage({ message, sender }) {
-      // const message = props.message;
-      // const sender = props.sender;
-      // const { message, sender } = props;
-
-      /*
-      if (sender === 'robot') {
-        return (
-          <div>
-            <img src="robot.png" width="50" />
-            {message}
-          </div>
-        );
-      }
-      */
-
       return (
         <div className={
-          (sender === 'user')
-            ? 'chat-message-user'
-            : 'chat-message-robot'
+          (sender === 'user') ? 'chat-message-user' : 'chat-message-robot'
         }>
-          {sender === 'robot' && (
-            <img src="robot.png" className="chat-message-profile" />
-          )}
-          <div className='chat-message-text'>
+          <div className={sender === 'user' ? 'chat-message-text-user' : 'chat-message-text-robot'}>
             {message}
           </div>
-          {sender === 'user' && (
-            <img src="user.png" width="50" className="chat-message-profile" />
-          )}
         </div>
       );
     }
@@ -219,8 +243,7 @@
     function ChatMessages({ chatMessages }) {
       const chatMessagesRef = useAutoScroll([chatMessages]);
       return (
-        <div className="chat-messages-container"
-          ref={chatMessagesRef}>
+        <div className="chat-messages-container" ref={chatMessagesRef}>
           {chatMessages.map((chatMessage) => {
             return (
               <ChatMessage
@@ -233,15 +256,9 @@
         </div>
       );
     }
-    function welcome(chatMessages) {
-      return (
-        <p className='welcome-text'> Welcome to the Chatbot project! Send a message using textbox below.</p>
-      )
-    }
 
     function useAutoScroll(dependencies) {
       const containerRef = React.useRef(null);
-
       React.useEffect(() => {
         const containerElem = containerRef.current;
         if (containerElem) {
@@ -253,22 +270,16 @@
 
     function App() {
       const [chatMessages, setChatMessages] = React.useState([]);
-      // const [chatMessages, setChatMessages] = array;
-      // const chatMessages = array[0];
-      // const setChatMessages = array[1];
 
       return (
         <div className="app-contianer">
-          {chatMessages.length === 0 && (<p className="welcome-message">
-            Welcome to the chatbot project! Send a message using the textbox below.
-          </p>)}
-          <ChatMessages
-            chatMessages={chatMessages}
-          />
-          <ChatInput
-            chatMessages={chatMessages}
-            setChatMessages={setChatMessages}
-          />
+          {chatMessages.length === 0 && (
+            <p className="welcome-message">
+              Welcome to the chatbot project! Send a message using the textbox below.
+            </p>
+          )}
+          <ChatMessages chatMessages={chatMessages} />
+          <ChatInput chatMessages={chatMessages} setChatMessages={setChatMessages} />
         </div>
       );
     }
